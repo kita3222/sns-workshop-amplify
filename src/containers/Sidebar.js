@@ -13,11 +13,13 @@ import {
 import {
   Person as PersonIcon,
   Public as PublicIcon,
+  Home as HomeIcon,
+  Search as SearchIcon,
 } from '@material-ui/icons';
 
 import {Auth, API, graphqlOperation } from 'aws-amplify';
 
-import { createPost } from '../graphql/mutations';
+import { createPostAndTimeline } from '../graphql/mutations';
 import { useHistory } from 'react-router';
 
 const drawerWidth = 340;
@@ -38,6 +40,7 @@ const useStyles = makeStyles(theme => ({
     width: drawerWidth,
   },
   list: {
+    // overflowWrap: 'break-word',
     width: 300,
   },
 }));
@@ -62,11 +65,7 @@ export default function Sidebar({activeListItem}) {
   };
 
   const onPost = async () => {
-    const res = await API.graphql(graphqlOperation(createPost, { input: {
-      type: 'post',
-      content: value,
-      timestamp: Math.floor(Date.now() / 1000),
-    }})); 
+    const res = await API.graphql(graphqlOperation(createPostAndTimeline, { content: value })); 
 
     console.log(res)
     setValue('');
@@ -90,6 +89,17 @@ export default function Sidebar({activeListItem}) {
       <div className={classes.toolbar} />
       <List>
         <ListItem
+            button
+            selected={activeListItem === 'Home'}
+            onClick={() => { history.push('/')}}
+            key='home'
+          >
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="Home" />
+        </ListItem>
+        <ListItem
           button
           selected={activeListItem === 'global-timeline'}
           onClick={() => {
@@ -103,6 +113,21 @@ export default function Sidebar({activeListItem}) {
             <PublicIcon />
           </ListItemIcon>
           <ListItemText primary="Global Timeline" />
+        </ListItem>
+        <ListItem
+          button
+          selected={activeListItem === 'search'}
+          onClick={() => {
+            Auth.currentAuthenticatedUser().then((user) => {
+              history.push('search');
+            })
+          }}
+          key='search'
+        >
+          <ListItemIcon>
+            <SearchIcon />
+          </ListItemIcon>
+          <ListItemText primary="Search" />
         </ListItem>
         <ListItem
           button
@@ -150,15 +175,16 @@ export default function Sidebar({activeListItem}) {
           } />
         </ListItem>
         <ListItem key='logout'>
-          <ListItemText primary={
-            <Button
-              variant="outlined"
-              onClick={signOut}
-              fullWidth
-            >
-              Logout
-            </Button>
-          } />
+    <ListItemText primary={
+    <Button
+        variant="outlined"
+        onClick={signOut}
+        fullWidth
+    >
+        Sign out
+    </Button>
+} />
+
         </ListItem>
       </List>
     </Drawer>

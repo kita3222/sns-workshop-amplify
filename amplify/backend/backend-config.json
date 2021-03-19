@@ -19,7 +19,11 @@
               "userPoolId": "authboyaki209e71af"
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ]
         }
       }
     }
@@ -27,8 +31,25 @@
   "hosting": {
     "amplifyhosting": {
       "service": "amplifyhosting",
+      "type": "cicd",
+      "lastPushTimeStamp": "2021-03-19T15:27:56.395Z"
+    }
+  },
+  "function": {
+    "createPostAndTimeline": {
+      "build": true,
       "providerPlugin": "awscloudformation",
-      "type": "manual"
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "BoyakiGql",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput"
+          ]
+        }
+      ]
     }
   }
 }
