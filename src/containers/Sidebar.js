@@ -175,15 +175,16 @@ export default function Sidebar({activeListItem}) {
           } />
         </ListItem>
         <ListItem key='logout'>
-          <ListItemText primary={
-            <Button
-              variant="outlined"
-              onClick={signOut}
-              fullWidth
-            >
-              Logout
-            </Button>
-          } />
+    <ListItemText primary={
+    <Button
+        variant="outlined"
+        onClick={signOut}
+        fullWidth
+    >
+        Sign out
+    </Button>
+} />
+
         </ListItem>
       </List>
     </Drawer>
