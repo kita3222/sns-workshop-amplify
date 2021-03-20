@@ -181,7 +181,7 @@ export default function Sidebar({activeListItem}) {
         onClick={signOut}
         fullWidth
     >
-        bye // <-- byeに変更
+        サインアウト // <-- byeに変更
     </Button>
 } />
         
